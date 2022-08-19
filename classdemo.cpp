@@ -18,7 +18,7 @@ int main(){
 	ytchan.name = "yeahman";
 	ytchan.owner = "Erhun Cetiner";
 	ytchan.subcount = 1800;
-//	ytchan.titles = {"CSGO Video", "BOUN Video"};
+	ytchan.titles = {"CSGO Video", "BOUN Video"};
 	
 	cout << "Name: " << ytchan.name << endl;  
 	cout << "Owner: " << ytchan.owner << endl;  
