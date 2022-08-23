@@ -6,11 +6,13 @@
 #include <sstream>
 #include <cmath>
 #include <iostream>
+#include <limits>
 
 #include "player.h"
 #include "npc.h"
 #include "building.h"
 #include "city.h"
+#include "kingdom.h"
 
 using namespace std;
 
@@ -32,13 +34,14 @@ using namespace std;
 //	string getName(void);
 	void player::getName(string inname){
 		cout << "What is your name? " << endl;
-		cin >> inname;
+//		cin >> inname;
+	getline (cin, inname);
 		name = inname;
 	}
 	
 	void player::getRace(string inrace){
 		cout << "What is your race? " << endl;
-		cin >> inrace;
+		getline (cin, inrace);
 		race = inrace;
 	}
 	
@@ -80,7 +83,7 @@ using namespace std;
 //			
 //};
 
-void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable){
+void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable, kingdom& kingdom_01){
 	
 
 	
@@ -89,9 +92,16 @@ void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable){
 	cout << "You may start in Erhunia or in Erhunic. Choose wisely." << " When you decide, you must type in the name of the city below and tap ENTER."
 	<< endl;
 	
+	kingdom_01.famousarea = "Erhu Plateau";
+	kingdom_01.famoussea = "Sea of Promes";
+	kingdom_01.power = 100;
+	kingdom_01.name = "Erhunian Kingdom";
+	
 	cin >> firstCity.cityname;
 	if (firstCity.cityname == "Erhunic"){
-	
+		
+		firstCity.code = 2;
+		kingdom_01.code = 1;
 		self.gold = 20;
 		self.goods = 60;
 		npc_01.amount = 150;
@@ -99,32 +109,86 @@ void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable){
 		npc_01.race = "Snow Elf";
 		npc_01.name = "Heiten Kren";
 //		cout << npc_01.race << endl;
-		firstCity.gold = 5000;
-		firstCity.population = 6000;
+//		firstCity.gold = 5000;
+//		firstCity.population = 6000;
 		firstCity.shop.owner.name = npc_01.name;
 		
-		firstCity.shop.name = "Nakibey Doner Salonu";
-		notable.name = firstCity.shop.name;		
+		firstCity.shop.name = "Snowy Pasture";
+		notable.name = firstCity.shop.name;	
+			
 //		cout << npc_01.gold << endl;
 	}
 	
+	else if (firstCity.cityname == "Erhunia"){
+		firstCity.code = 1;
+		kingdom_01.code = 1;
+		self.gold = 50;
+		self.goods = 20;
+		npc_01.amount = 100;
+		npc_01.gold = 450;
+		npc_01.race = "High Elf";
+		npc_01.name = "Kramer Lanes";
+//		firstCity.gold = 10000;
+//		firstCity.population = 20000;
+		firstCity.shop.owner.name = npc_01.name;
+		
+		firstCity.shop.name = "Capital Goods";
+		notable.name = firstCity.shop.name;	
+	}
 	
+	cout << endl << "Your name is " << self.name << "." << endl << "Your race is " << self.race << "." << endl << "You have " << self.gold << " gold." << endl << "You carry " << self.goods << " goods with you." << endl << endl;
+	
+	if (firstCity.code == 1){
+	
+	cout << "It was almost a week by now that you had hopped on this ship to the "<< kingdom_01.name << "'s renowned capital, " << firstCity.cityname << ". At dusk, you start hearing the screams of the seagulls that herald the end of your journey. "
+	<< "After a few hours spent in the " << kingdom_01.famoussea << ", the coastal walls and the huge harbor of " << firstCity.cityname << " become apparent. Your ship slowly makes its way into the harbor. You are finally here. Welcome to " << firstCity.cityname << ". You decide to take a stroll in the city after disembarking. " << endl << endl;
+	
+//	cout << "Press Enter to Continue" << endl;
+//	cin.ignore();
+	
+//	cout << "Press Enter to Continue" << endl << endl;
+////	cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
+//	cin;
+//	cin.get(); 	
+	}
+	
+	else if (firstCity.code == 2){
+	
+	cout << "You had joined a trade caravan to the productive city of " << firstCity.cityname << ", the second largest city in the " << kingdom_01.name << ". The city is founded on the snowy mountains that oversee the "
+	<< kingdom_01.famousarea << " by the " << npc_01.race << " in the ancient times as a frontier town. However by now, the city has become a production powerhouse in the midst of the" << kingdom_01.name << ". After finally entering the city with the caravan, you decide to take a stroll. "
+	<< endl << endl;
+	
+//	cout << "Press Enter to Continue" << endl;
+//	cin.ignore();
+	
+	
+//	cout << "Press Enter to Continue" << endl << endl;
+////	cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
+////	cin;
+////	cin.get(); 
+//char temp = 'x';
+//while (temp != '\n'){
+//
+// cin.get(temp);	
+//}
+
+	}
 	
 }
 
-void purchase(player& self, building& shop, npc& person, city& town){
+void entershop(player& self, building& shop, npc& person, city& town){
 	
-	self.gold = self.gold - 10;
-	self.goods = self.goods + 1;
-	
-	person.gold = person.gold + 10;
-	person.amount = person.amount - 1;
+//	self.gold = self.gold - 10;
+//	self.goods = self.goods + 1;
+//	
+//	person.gold = person.gold + 10;
+//	person.amount = person.amount - 1;
 	
 	
 	cout << "After a short walk, you push the door of an old looking building and enter inside. "
 	<< "You are now at " << shop.name << ". The shopkeeper greets you. This old looking man introduces himself as "
 	<< person.name << ". By his clothing and stereotypical looks, you note that this man is an obvious " << person.race
-	<< ". In a calm and well-toned voice, he says: Welcome to " << town.cityname << ", fellow " << self.race << "." << endl;
+	<< ". In a calm and well-toned voice, he says: Welcome to " << town.cityname << ", fellow " << self.race << "." << endl << endl;
 	
 	
 //	cout <<	person.gold;
@@ -136,7 +200,46 @@ void purchase(player& self, building& shop, npc& person, city& town){
 	
 }
 
+void sellgoods(player& self, building& shop, npc& person, city& town){
+	
+	if (town.cityname == "Erhunic"){
+		town.buyprice = 25;
+		town.sellprice = 15;
+	}
+	else if (town.cityname == "Erhunia"){
+		town.buyprice = 40;
+		town.sellprice = 25;
+	}
+	
+	int amount;
+	cout << person.name << " seems to be quite well-off. You gest him that you are going to sell some of the goods you are carrying. He asks: " << endl;
+	cout << "How many goods you want to sell? " << " The current price in " << town.cityname << " is " << town.sellprice << " per good you sell. " << endl << endl;
+	cin >> amount;
+	
+	while (amount > self.goods) {
+		cout << "You don't have that many goods. Please try again. " << endl;
+		cin >> amount;
+	}
+	
+	self.gold = self.gold + town.sellprice*amount;
+	person.gold = person.gold - town.sellprice*amount;
+	
+	self.goods = self.goods - amount;
+	person.amount = person.amount - amount;
+	
+	
+	cout << "You now have " << self.gold << " gold." << endl;
+}
 
+void welcome(player& self, city& town){
+	
+	cout << "Welcome to Erhunia! Erhunia is a medieval feudal kingdom. It offers oppurtunities and challenges for the bold. The Erhunian Kingdom's capital is the maritime trade center that is known as "
+	<< "Erhunia. " << "The second largest city " << "Erhunic " << "is found high up in the snowy mountains. " << "Erhunia is expectedly large and wealthy, however they lack in goods while Erhunic is richer in resources and goods. "
+	<< "A smart adventurer could exploit this situation to their advantage. " << endl << endl;
+	
+	
+	
+}
 //void refill
 
 //void travel
@@ -149,8 +252,8 @@ void purchase(player& self, building& shop, npc& person, city& town){
 
 
 string entry_name, entry_race;
-double start_gold = 100;
-int start_goods = 20;
+//double start_gold;
+//int start_goods;
 
 
 int main(){
@@ -159,15 +262,21 @@ int main(){
 	npc npc_01;
 	city city_01;
 	building shop_01;
+	kingdom kingdom_01;
+	
+	
+	welcome(new_player, city_01);
 	
 	new_player.getName(entry_name);
 	new_player.getRace(entry_race);
 	
-	startingLoc(new_player, npc_01, city_01, shop_01);
-//	cout << npc_01.gold << endl;
-	purchase(new_player, shop_01, npc_01, city_01);
-//	cout << npc_01.gold << endl;
 	
+	
+	startingLoc(new_player, npc_01, city_01, shop_01, kingdom_01);
+//	cout << npc_01.gold << endl;
+	entershop(new_player, shop_01, npc_01, city_01);
+//	cout << npc_01.gold << endl;
+	sellgoods(new_player, shop_01, npc_01, city_01);
 	
 	
 	

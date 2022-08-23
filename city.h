@@ -16,5 +16,6 @@ class city {
 		building shop;
 		double gold;
 		int population;	
-			
+		int buyprice, sellprice;
+		int code;	
 };
