@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdexcept>
 #include <fstream>
 #include <string>
 #include <stdlib.h>
@@ -13,6 +14,8 @@
 #include "building.h"
 #include "city.h"
 #include "kingdom.h"
+#include "economy.h"
+//#include "economy.cpp"
 
 using namespace std;
 
@@ -97,9 +100,14 @@ void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable, 
 	kingdom_01.power = 100;
 	kingdom_01.name = "Erhunian Kingdom";
 	
+	
+	
 	cin >> firstCity.cityname;
+	
+
 	if (firstCity.cityname == "Erhunic"){
-		
+//		firstCity.buyprice = 25;
+//		firstCity.sellprice = 15;
 		firstCity.code = 2;
 		kingdom_01.code = 1;
 		self.gold = 20;
@@ -120,6 +128,8 @@ void startingLoc(player& self, npc& npc_01, city& firstCity, building& notable, 
 	}
 	
 	else if (firstCity.cityname == "Erhunia"){
+//		firstCity.buyprice = 40;
+//		firstCity.sellprice = 25;
 		firstCity.code = 1;
 		kingdom_01.code = 1;
 		self.gold = 50;
@@ -196,12 +206,12 @@ void entershop(player& self, building& shop, npc& person, city& town){
 	
 //	cout << "The shopowner now has " << person.gold << " gold." << endl;
 //	cout << "You have " << self.gold << " gold left." << endl;
-
+	shop.first = 3;
 	
 }
 
-void sellgoods(player& self, building& shop, npc& person, city& town){
-	
+void sellgoods(player& self, building& shop, npc& person, city& town, economy& econ){
+	if (shop.first == 3) {
 	if (town.cityname == "Erhunic"){
 		town.buyprice = 25;
 		town.sellprice = 15;
@@ -211,13 +221,20 @@ void sellgoods(player& self, building& shop, npc& person, city& town){
 		town.sellprice = 25;
 	}
 	
+}
+	else if (shop.first == 4) {
+	
+	cout << "After some time you enter the " << shop.name << " again. " << person.name << " greets you. ";
+	
+	}
+	
 	int amount;
 	cout << person.name << " seems to be quite well-off. You gest him that you are going to sell some of the goods you are carrying. He asks: " << endl;
 	cout << "How many goods you want to sell? " << " The current price in " << town.cityname << " is " << town.sellprice << " per good you sell. " << endl << endl;
 	cin >> amount;
 	
 	while (amount > self.goods) {
-		cout << "You don't have that many goods. Please try again. " << endl;
+		cout << "You don't have that many goods. Please try again. " << endl << endl;
 		cin >> amount;
 	}
 	
@@ -229,15 +246,19 @@ void sellgoods(player& self, building& shop, npc& person, city& town){
 	
 	
 	cout << "You now have " << self.gold << " gold." << endl;
+	
+//	shop.notfirst = 1;
+	shop.first = 4;
+
 }
 
-void welcome(player& self, city& town){
+void welcome(player& self, city& town, economy& econ){
 	
 	cout << "Welcome to Erhunia! Erhunia is a medieval feudal kingdom. It offers oppurtunities and challenges for the bold. The Erhunian Kingdom's capital is the maritime trade center that is known as "
 	<< "Erhunia. " << "The second largest city " << "Erhunic " << "is found high up in the snowy mountains. " << "Erhunia is expectedly large and wealthy, however they lack in goods while Erhunic is richer in resources and goods. "
 	<< "A smart adventurer could exploit this situation to their advantage. " << endl << endl;
 	
-	
+econ.localInflation = 1.0;
 	
 }
 //void refill
@@ -246,26 +267,71 @@ void welcome(player& self, city& town){
 
 //void talk
 
-
+void priceUpdate_refugees(economy& econ, city& town, npc& npc_orc_01, kingdom kingdom_02, kingdom& kingdom_01, kingdom kingdom_03, building& shop){
+	
+	
+	npc_orc_01.race = "Orc";
+	npc_orc_01.name = "Heqar Qeman";
+	
+	kingdom_02.code = 2;
+	kingdom_02.k_city.cityname = "Orkon";
+	kingdom_02.famousarea = "Glameris";
+	kingdom_02.power = 0;
+	kingdom_02.war = false;
+	kingdom_02.name = "Western Orc Federation";
+	
+	kingdom_03.code = 3;
+	kingdom_03.famousarea = "Eastern Oxar";
+	kingdom_03.k_city.cityname = "Oxar";
+	kingdom_03.name = "Eastern Orcish Kingdom";
+	kingdom_03.rulername = "Nemux";
+	kingdom_03.war = false;
+	kingdom_03.power = 80;
+	kingdom_03.famoussea = "Long Sea";
+	
+	cout << "A short " << npc_orc_01.race << " is heard running through the streets with great haste. He seems to be shouting about grim news. After listening closely, you make sense of his words. He is warning the townsfolk about the fall of the " << kingdom_02.name << ". Their capital "
+	<< kingdom_02.k_city.cityname << " is left ablaze after the forces of the " << kingdom_03.name <<  " captured it after a long and brutal siege." << " While the future of the " << kingdom_02.famousarea << " is uncertain, one thing is for certain. More and more " << npc_orc_01.race << " refugees will flow into the "
+	<< kingdom_01.name << ". You think that the increasing refugee population and hopeless workers will raise the prices. " << endl << endl;
+	
+	econ.crisisActive = false;
+	town.buyprice = town.buyprice*econ.localInflation;
+	town.sellprice = town.sellprice*econ.localInflation;
+	
+//	shop.notfirst = 1;
+}
 
 
 
 
 string entry_name, entry_race;
+
+
+string a;
+bool b;
+double c,d,e;
 //double start_gold;
 //int start_goods;
 
 
 int main(){
+	
+	
 
 	player new_player;
-	npc npc_01;
+	npc npc_01, npc_02;
 	city city_01;
 	building shop_01;
 	kingdom kingdom_01;
+	kingdom kingdom_02;
+	kingdom kingdom_03;
+	economy econ_01;
 	
+//	city_01.buyprice = 25;
+//	city_01.sellprice = 15;
 	
-	welcome(new_player, city_01);
+//	econ_01.refugeeCrisis()
+	
+	welcome(new_player, city_01, econ_01);
 	
 	new_player.getName(entry_name);
 	new_player.getRace(entry_race);
@@ -276,9 +342,15 @@ int main(){
 //	cout << npc_01.gold << endl;
 	entershop(new_player, shop_01, npc_01, city_01);
 //	cout << npc_01.gold << endl;
-	sellgoods(new_player, shop_01, npc_01, city_01);
+	sellgoods(new_player, shop_01, npc_01, city_01, econ_01);
 	
+//	refugeeCrisis();
+	econ_01.refugeeCrisis();
+//	cout << econ_01.localInflation << endl;
+	priceUpdate_refugees(econ_01, city_01, npc_02, kingdom_02, kingdom_01, kingdom_03, shop_01);
 	
+	sellgoods(new_player, shop_01, npc_01, city_01, econ_01);
+
 	
 	return 0;
 }

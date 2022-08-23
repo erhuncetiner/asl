@@ -7,6 +7,8 @@
 #include <cmath>
 #include <iostream>
 
+//#include "economy.h"
+
 using namespace std;
 
 class city {
@@ -16,6 +18,7 @@ class city {
 		building shop;
 		double gold;
 		int population;	
-		int buyprice, sellprice;
+		double buyprice, sellprice;
 		int code;	
+//		economy econ;
 };

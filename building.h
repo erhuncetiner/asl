@@ -16,6 +16,7 @@ class building {
 		string name;
 		int goods;
 		npc owner;
+		int first;
 //		npc customer;
 		
 };

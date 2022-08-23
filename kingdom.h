@@ -15,8 +15,13 @@ class kingdom {
 //		building tavern;
 //		building shop;
 		double power;
+		string rulername;
+		string rulerhouse;
 //		int population;	
 //		int buyprice, sellprice;
+		city k_city;
 		int code;	
 		string famoussea, famousarea;
+		bool war;
+//		economy econ;
 };
